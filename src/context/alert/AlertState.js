@@ -1,0 +1,34 @@
+import React, { useReducer } from "react";
+import AlertContext from "./alertContext";
+import AlertReducer from "./alertReducer";
+import { SET_ALERT, REMOVE_ALERT } from "../types";
+
+const AlertState = (props) => {
+  const initialState = null;
+
+  //we need to use the useReducer hook here
+  const [state, dispatch] = useReducer(AlertReducer, initialState);
+
+  //Set Alert
+
+  const setAlert = (msg, type) => {
+    dispatch({ type: SET_ALERT, payload: { msg, type } });
+    setTimeout(() => dispatch({ type: REMOVE_ALERT }), 5000);
+  };
+
+  //we need to pass in anything we want available for entire app inside value
+  return (
+    <AlertContext.Provider
+      value={{
+        alert: state,
+        setAlert,
+      }}
+    >
+      {
+        props.children //because we need to wrap our application in this provider
+      }
+    </AlertContext.Provider>
+  );
+};
+
+export default AlertState;
